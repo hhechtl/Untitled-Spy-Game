@@ -13,7 +13,13 @@ let config = {
                 debug: false
           }
       },
-      scene: [ Menu ]
+      scene: [ Menu, Play, Option, Credit, LevelSelect]
   }
   
   let game = new Phaser.Game(config);
+
+  // initializing variables 
+  let sceneSelect = 'playScene'; // for selecting between scenes 
+
+  //reserve keyboard vars
+  let keyLeft, keyRight, keyUp, keyDown, keyJump;
