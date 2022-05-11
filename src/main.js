@@ -4,13 +4,13 @@ let config = {
       height: 225,
       scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        zoom: 4
+        zoom: 1 //4
       },
       physics: {
           default: 'arcade',
           arcade: {
-                gravity: { y: 0 },
-                debug: false
+                gravity: { y: 800 },
+                debug: true
           }
       },
       scene: [ Menu, Play, Option, Credit, LevelSelect]
