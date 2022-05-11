@@ -15,18 +15,27 @@ class Play extends Phaser.Scene {
         keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+        keyDisguise = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
         //create player 
         this.plrSpy = new PlayerSpy(this, 100, 50,);
 
         //temp floor
         this.floor = new Floor(this,200,game.config.height);
         this.physics.add.collider(this.plrSpy,this.floor);
+        //moving text 
+        this.dressedText = this.add.text(game.config.width/2 + 600, game.config.height/2, 'Getting dressed...',{fontSize: '9px'} ).setOrigin(0.5);
 
         
     }
 
     update(time, delta ) {
         this.plrSpy.update(time, delta);
+
+        //allows text to follow player while getting dressed
+        if(this.plrSpy.gettingDressed){
+            this.dressedText.x = this.plrSpy.x +10;
+            this.dressedText.y = this.plrSpy.y - 30;
+        }
     }
 
 }

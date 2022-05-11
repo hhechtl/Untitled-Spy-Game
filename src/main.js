@@ -4,7 +4,7 @@ let config = {
       height: 225,
       scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        zoom: 4 //4
+        zoom: 2 //4
       },
       physics: {
           default: 'arcade',
@@ -22,4 +22,4 @@ let config = {
   let sceneSelect = 'playScene'; // for selecting between scenes 
 
   //reserve keyboard vars
-  let keyLeft, keyRight, keyUp, keyDown, keyJump;
+  let keyLeft, keyRight, keyUp, keyDown, keyJump, keyDisguise;

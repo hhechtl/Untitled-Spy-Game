@@ -11,10 +11,12 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
 
         //player variables 
         this.disguiseActive = false;
+        this.gettingDressed = false; 
+        
 
         //needs to be tweaked 
         this.normalMoveSpeed = 350; //Horizontal movement
-        this.slowedMoveSpeed = 250; // slowed movement speed
+        this.slowedMoveSpeed = 150; // slowed movement speed
         this.setMaxVelocity(250); // max velocity 
         this.setDragX(400);
         this.jumpPower = -300;
@@ -32,11 +34,12 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         - Santiago */
         delta /= 1000
         //Horizontal movement
-        if(keyLeft.isDown && this.x > 0 ){
-            this.disguiseActive ? this.setAccelerationX(-this.normalMoveSpeed) : this.setAccelerationX(-this.slowedMoveSpeed);
+        if(keyLeft.isDown && this.x > 0 ){  //player will move slower when disguise is active
+            this.disguiseActive ? this.setAccelerationX(-this.slowedMoveSpeed) : this.setAccelerationX(-this.normalMoveSpeed);
+    
         }
         else if(keyRight.isDown && this.x < config.width){
-            this.disguiseActive ? this.setAccelerationX(this.normalMoveSpeed) : this.setAccelerationX(this.slowedMoveSpeed);
+            this.disguiseActive ? this.setAccelerationX(this.slowedMoveSpeed) : this.setAccelerationX(this.normalMoveSpeed);
         }
         else{
             //player stops moving when not holding key
@@ -62,11 +65,34 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
                 //reset jump timer when it's not being pressed
                 this.jumpTime = 0;
             }
-        }    
+        }
+        //applying disguise
+        if(keyDisguise.isDown && !this.disguiseActive){
+            this.disguiseOn(); 
+            this.active = this.scene.time.addEvent({ delay: 10000, callback: () =>{
+                console.log("its off");
+                this.disguiseOff()
+                this.gettingDressed = false; 
+                this.scene.dressedText.x = this.y - 300;
+            } });
+
+        }
+
 
     }
+
     disguiseOn(){
-        this.disguiseActive = true;
+        this.gettingDressed = true; // allows text to follow player to let them know theyre getting dressed
+        console.log("getting dressed");
+        //timer to take time applying disguise 
+        this.dressed = this.scene.time.addEvent({ delay: 2000, callback: () =>{
+            console.log("Disguise On");
+            this.disguiseActive = true;
+            //this.gettingDressed = false;               //turn these on when we have visuals
+            //this.scene.dressedText.x = this.y - 300;
+            this.scene.dressedText.text = "Disguised";
+
+            } });
     }
     disguiseOff(){
         this.disguiseActive = false;
