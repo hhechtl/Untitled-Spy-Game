@@ -8,6 +8,17 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         
         //needs to be tweaked when assets are loaded
         this.setCircle(10); //Testing collision box resizing/changing
+
+        //player variables 
+        this.disguiseActive = false;
+
+        //needs to be tweaked 
+        this.normalMoveSpeed = 350; //Horizontal movement
+        this.slowedMoveSpeed = 250; // slowed movement speed
+        this.setMaxVelocity(250); // max velocity 
+        //this.setDragX(300);
+        // remove later, for testing
+        this.setCollideWorldBounds(true);
         
     }
 
@@ -18,6 +29,21 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         - Santiago */
         delta /= 1000
         //Horizontal movement
+        if(keyLeft.isDown && this.x > 0 ){
+            this.disguiseActive ? this.setAccelerationX(-this.normalMoveSpeed) : this.setAccelerationX(-this.slowedMoveSpeed);
+        }
+        else if(keyRight.isDown && this.x < config.width){
+            this.disguiseActive ? this.setAccelerationX(this.normalMoveSpeed) : this.setAccelerationX(this.slowedMoveSpeed);
+        }
+        else{
+            this.setVelocityX(0);
+        }
 
+    }
+    disguiseOn(){
+        this.disguiseActive = true;
+    }
+    disguiseOff(){
+        this.disguiseActive = false;
     }
 }

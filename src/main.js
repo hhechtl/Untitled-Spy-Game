@@ -4,7 +4,7 @@ let config = {
       height: 225,
       scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        zoom: 1 //4
+        zoom: 2 //4
       },
       physics: {
           default: 'arcade',

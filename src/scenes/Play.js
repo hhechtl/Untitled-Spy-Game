@@ -10,7 +10,11 @@ class Play extends Phaser.Scene {
     create() {
         this.add.text(game.config.width/2, game.config.height/2, 'PLAY' ).setOrigin(0.5);
         keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
-
+        
+        //defining keys 
+        keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         //create player 
         this.plrSpy = new PlayerSpy(this, 100, 50,);
 
@@ -21,10 +25,8 @@ class Play extends Phaser.Scene {
         
     }
 
-    update() {
-        if (Phaser.Input.Keyboard.JustDown(keyJump)) {
-            this.scene.start('menuScene');    
-        }
+    update(time, delta ) {
+        this.plrSpy.update(time, delta);
     }
 
 }
