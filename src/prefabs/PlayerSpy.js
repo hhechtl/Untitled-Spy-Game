@@ -16,7 +16,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         this.normalMoveSpeed = 350; //Horizontal movement
         this.slowedMoveSpeed = 250; // slowed movement speed
         this.setMaxVelocity(250); // max velocity 
-        //this.setDragX(300);
+        this.setDragX(400);
         // remove later, for testing
         this.setCollideWorldBounds(true);
         
@@ -37,6 +37,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         }
         else{
             this.setVelocityX(0);
+            this.setAccelerationX(0);
         }
 
     }
