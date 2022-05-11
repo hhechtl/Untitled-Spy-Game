@@ -4,12 +4,12 @@ let config = {
       height: 225,
       scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        zoom: 2 //4
+        zoom: 4 //4
       },
       physics: {
           default: 'arcade',
           arcade: {
-                gravity: { y: 800 },
+                gravity: { y: 1500 },
                 debug: true
           }
       },
