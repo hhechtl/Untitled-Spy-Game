@@ -18,8 +18,8 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         //needs to be tweaked 
         this.normalMoveSpeed = 350; //Horizontal movement
         this.slowedMoveSpeed = 150; // slowed movement speed
-        this.setMaxVelocity(250); // max velocity 
-        this.setDragX(400);
+        this.setMaxVelocity(250,1000); // max velocity 
+        this.setDragX(600);
         this.jumpPower = -300;
         this.jumpTime = 1;
 
@@ -44,7 +44,6 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         }
         else{
             //player stops moving when not holding key
-            this.setVelocityX(0);
             this.setAccelerationX(0);
         }
         //jumping 
@@ -56,7 +55,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
                     // starts the jump
                     this.jumpTime = 1;
                     this.setVelocityY(this.jumpPower);
-                }else if (this.jumpTime > 0 && this.jumpTime < 31){ // can shorten jump time 
+                }else if (this.jumpTime > 0 && this.jumpTime < 20){ // can shorten jump time 
                     // this lets the player jump higher
                     this.jumpTime++;
                     this.setVelocityY(this.jumpPower+(this.jumpTime * 5)); // how much higher you jump
@@ -67,6 +66,8 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
                 this.jumpTime = 0;
             }
         }
+        //falling
+        console.log(this.body.velocity.y);
         //applying disguise
         if( (keyDisguise.getDuration() >= 5*1000) && !this.disguiseActive){
             this.disguiseOn(); 
