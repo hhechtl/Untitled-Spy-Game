@@ -12,6 +12,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         //player variables 
         this.disguiseActive = false;
         this.gettingDressed = false; 
+        this.disguisedTime = 0;
         
 
         //needs to be tweaked 
@@ -67,32 +68,31 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
             }
         }
         //applying disguise
-        if(keyDisguise.isDown && !this.disguiseActive){
+        if( (keyDisguise.getDuration() >= 5*1000) && !this.disguiseActive){
             this.disguiseOn(); 
+            // timer on how long the disguise is active
             this.active = this.scene.time.addEvent({ delay: 10000, callback: () =>{
                 console.log("its off");
                 this.disguiseOff()
-                this.gettingDressed = false; 
-                this.scene.dressedText.x = this.y - 300;
+                this.gettingDressed = false; //remove later
+                this.scene.dressedText.x = this.y - 300; // remove later
+                this.scene.dressedText.text = "Getting Dressed..."; //remove later 
             } });
-
+        }else if( keyDisguise.getDuration() != 0 && (keyDisguise.getDuration() <= 5*1000) && !this.disguiseActive){
+            this.gettingDressed = true; // text follows player 
+        }else if (!this.disguiseActive){
+            this.gettingDressed = false;
+            this.scene.dressedText.x = this.y - 300; 
         }
-
-
     }
 
     disguiseOn(){
-        this.gettingDressed = true; // allows text to follow player to let them know theyre getting dressed
-        console.log("getting dressed");
-        //timer to take time applying disguise 
-        this.dressed = this.scene.time.addEvent({ delay: 2000, callback: () =>{
             console.log("Disguise On");
             this.disguiseActive = true;
             //this.gettingDressed = false;               //turn these on when we have visuals
             //this.scene.dressedText.x = this.y - 300;
-            this.scene.dressedText.text = "Disguised";
+            this.scene.dressedText.text = "Disguised"; // remove later
 
-            } });
     }
     disguiseOff(){
         this.disguiseActive = false;

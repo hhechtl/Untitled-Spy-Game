@@ -67,8 +67,7 @@ class Menu extends Phaser.Scene {
                 }
               }
               //selects the scene 
-              if (Phaser.Input.Keyboard.JustDown(keyJump)) {
-                 console.log(sceneSelect); 
+              if (Phaser.Input.Keyboard.JustDown(keyJump)) { 
                     this.scene.start(sceneSelect);    
                 }
 
