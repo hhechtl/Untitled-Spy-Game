@@ -12,7 +12,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         //player variables 
         this.disguiseActive = false;
         this.gettingDressed = false; 
-        this.disguisedTime = 0;
+        this.detected = false;
         
 
         //needs to be tweaked 
@@ -66,8 +66,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
                 this.jumpTime = 0;
             }
         }
-        //falling
-        console.log(this.body.velocity.y);
+
         //applying disguise
         if( (keyDisguise.getDuration() >= 5*1000) && !this.disguiseActive){
             this.disguiseOn(); 

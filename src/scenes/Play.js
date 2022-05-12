@@ -17,7 +17,10 @@ class Play extends Phaser.Scene {
         keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         keyDisguise = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
         //create player 
-        this.plrSpy = new PlayerSpy(this, 100, 50,);
+        this.plrSpy = new PlayerSpy(this, 100, 50);
+        
+        //temp detection
+        this.detection = new LOS(this, 100,50, 'circle', 10 );
 
         //temp floor
         this.floor = new Floor(this,200,game.config.height);
@@ -25,17 +28,28 @@ class Play extends Phaser.Scene {
         //moving text 
         this.dressedText = this.add.text(game.config.width/2 + 600, game.config.height/2, 'Getting dressed...',{fontSize: '9px'} ).setOrigin(0.5);
 
-        
+        //colliders
+         this.physics.add.overlap(this.plrSpy, this.detection, this.detected, null, this);
+         this.gameOver = false;
     }
 
     update(time, delta ) {
-        this.plrSpy.update(time, delta);
+        if(!this.gameOver){
+            this.plrSpy.update(time, delta);
+        }
 
-        //allows text to follow player while getting dressed
+        //allows text to follow player while getting dressed 
         if(this.plrSpy.gettingDressed){
             this.dressedText.x = this.plrSpy.x +10;
             this.dressedText.y = this.plrSpy.y - 30;
         }
+        if(this.plrSpy.detected && !this.gameOver){
+            this.plrSpy.detected = false;
+        }
+    }
+
+    detected(plrObj, detectedObj){
+        plrObj.detected = true;
     }
 
 }
