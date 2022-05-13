@@ -57,10 +57,6 @@ class Play extends Phaser.Scene {
         // temp detector
         //this.groupDetectors.add(new LOS(this, 200,100));
 
-
-        //temp floor
-        this.floor = new Floor(this,200,game.config.height);
-        this.physics.add.collider(this.plrSpy, this.floor);
         this.physics.add.collider(this.plrSpy, solidLayer);
         this.platformCollision = this.physics.add.collider(this.plrSpy, platformLayer);
         //For dropping through platforms, we can temporarly disable the collider between player and platform layer
