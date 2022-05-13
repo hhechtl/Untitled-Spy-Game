@@ -22,4 +22,4 @@ let config = {
   let sceneSelect = 'playScene'; // for selecting between scenes 
 
   //reserve keyboard vars
-  let keyLeft, keyRight, keyUp, keyDown, keyJump, keyDisguise;
+  let keyLeft, keyRight, keyUp, keyDown, keyJump, keyDisguise, keyInteract;

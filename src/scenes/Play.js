@@ -10,7 +10,8 @@ class Play extends Phaser.Scene {
         this.load.path = 'assets/';
         this.load.image('tilesCityPH', 'PH_city_tiles_small.png');
         this.load.tilemapTiledJSON('lvlDigitalProto', 'levels/level_digital_prototype.json');
-        console.log("Finished loading");
+        
+        this.load.image('objButton', 'PH_obj_button.png');
     }
 
     create() {
@@ -27,9 +28,9 @@ class Play extends Phaser.Scene {
         //Makes all tiles that have property "collides" have collision
         solidLayer.setCollisionByProperty( {collides: true} );
         platformLayer.setCollisionByProperty( {collides: true} );
+        //Makes all the platform tiles only have 1-way collision
         platformLayer.forEachTile(tile => {
             if(tile.index == 16){
-                console.log("Made a tile one-way");
                 tile.collideLeft = false;
                 tile.collideRight = false;
                 tile.collideDown = false;
@@ -45,9 +46,14 @@ class Play extends Phaser.Scene {
         keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         keyDisguise = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
         keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        keyInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        
+
         //create player 
         this.plrSpy = new PlayerSpy(this, 100, 50);
-        
+        this.groupButtonObjs = this.add.group([new ObjInteract(this, 240, 32, 'objButton')]);
+        this.groupButtonObjs.runChildUpdate = true;
+
         // group of detectors
         // if player i caught in one game ends
         this.groupDetectors = this.physics.add.group();
