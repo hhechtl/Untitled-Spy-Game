@@ -51,10 +51,13 @@ class Play extends Phaser.Scene {
 
         //create player 
         this.plrSpy = new PlayerSpy(this, 100, 50);
+        //Create buttons
         this.groupButtonObjs = this.add.group([new ObjInteract(this, 272, 32, 'objButton'),
          new ObjInteract(this, 16, 208, 'objButton'), new ObjInteract(this, 528, 208, 'objButton'),
          new ObjInteract(this, 272, 432, 'objButton')]);
         this.groupButtonObjs.runChildUpdate = true;
+        //Create objective tracker
+        this.buttonTracker = new Checklist(this, "buttonTracker", this.groupButtonObjs.length);
 
         // group of detectors
         // if player i caught in one game ends
