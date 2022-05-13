@@ -52,6 +52,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.plrSpy, this.floor);
         this.physics.add.collider(this.plrSpy, solidLayer);
         this.physics.add.collider(this.plrSpy, platformLayer);
+        //For dropping through platforms, we can temporarly disable the collider between player and platform layer
     }
 
     update(time, delta ) {
