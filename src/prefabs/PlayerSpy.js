@@ -51,7 +51,8 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         //http://floss.booktype.pro/learn-javascript-with-phaser/game-mechanic-longer-jumps-if-holding-jump-down/
         if(!this.disguiseActive){ // player can only jump when not disguised
             if(keyJump.isDown){
-                if(this.body.touching.down && this.jumpTime == 0){
+                if(this.body.onFloor() && this.jumpTime == 0){
+                    
                     // starts the jump
                     this.jumpTime = 1;
                     this.setVelocityY(this.jumpPower);
