@@ -16,7 +16,6 @@ class ObjInteract extends Phaser.Physics.Arcade.Sprite {
     update(time, delta){
         //Can be interacted with if either not activated, or can be activated multiple times
         if(this.scene.physics.overlap(this, this.playerRef) && (!this.activated || this.repeatable)){
-            console.log("Player is overlapping");
             if(Phaser.Input.Keyboard.JustDown(keyInteract)){
                 this.activate();
             }

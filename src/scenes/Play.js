@@ -51,7 +51,9 @@ class Play extends Phaser.Scene {
 
         //create player 
         this.plrSpy = new PlayerSpy(this, 100, 50);
-        this.groupButtonObjs = this.add.group([new ObjInteract(this, 240, 32, 'objButton')]);
+        this.groupButtonObjs = this.add.group([new ObjInteract(this, 272, 32, 'objButton'),
+         new ObjInteract(this, 16, 208, 'objButton'), new ObjInteract(this, 528, 208, 'objButton'),
+         new ObjInteract(this, 272, 432, 'objButton')]);
         this.groupButtonObjs.runChildUpdate = true;
 
         // group of detectors
