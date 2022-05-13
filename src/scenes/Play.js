@@ -27,6 +27,14 @@ class Play extends Phaser.Scene {
         //Makes all tiles that have property "collides" have collision
         solidLayer.setCollisionByProperty( {collides: true} );
         platformLayer.setCollisionByProperty( {collides: true} );
+        platformLayer.forEachTile(tile => {
+            if(tile.index == 16){
+                console.log("Made a tile one-way");
+                tile.collideLeft = false;
+                tile.collideRight = false;
+                tile.collideDown = false;
+            }
+        })
 
 
         this.add.text(game.config.width/2, game.config.height/2, 'PLAY' ).setOrigin(0.5);
