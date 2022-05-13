@@ -16,8 +16,8 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         
 
         //needs to be tweaked 
-        this.normalMoveSpeed = 350; //Horizontal movement
-        this.slowedMoveSpeed = 150; // slowed movement speed
+        this.normalMoveSpeed = 500; //Horizontal acceleration
+        this.slowedMoveSpeed = 150; //Slow (disguising) acceleration
         this.setMaxVelocity(250,1000); // max velocity 
         this.setDragX(600);
         this.jumpPower = -300;
@@ -46,11 +46,12 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
             //player stops moving when not holding key
             this.setAccelerationX(0);
         }
+        
         //jumping 
         // how to implement it was looked from here.
         //http://floss.booktype.pro/learn-javascript-with-phaser/game-mechanic-longer-jumps-if-holding-jump-down/
         if(!this.disguiseActive){ // player can only jump when not disguised
-            if(keyJump.isDown){
+            if(keyJump.isDown && !keyDown.isDown){
                 if(this.body.onFloor() && this.jumpTime == 0){
                     
                     // starts the jump
@@ -84,6 +85,14 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         }else if (!this.disguiseActive){
             this.gettingDressed = false;
             this.scene.dressedText.x = this.y - 300; 
+        }
+
+        //Dropping through platforms (while DOWN + JUMP is held down)
+        if(keyDown.isDown && keyJump.isDown){
+            this.scene.platformCollision.active = false;
+        }
+        else{
+            this.scene.platformCollision.active = true;
         }
     }
 

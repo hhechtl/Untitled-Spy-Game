@@ -44,6 +44,7 @@ class Play extends Phaser.Scene {
         keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         keyDisguise = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+        keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         //create player 
         this.plrSpy = new PlayerSpy(this, 100, 50);
         
@@ -61,15 +62,15 @@ class Play extends Phaser.Scene {
         this.floor = new Floor(this,200,game.config.height);
         this.physics.add.collider(this.plrSpy, this.floor);
         this.physics.add.collider(this.plrSpy, solidLayer);
-        this.physics.add.collider(this.plrSpy, platformLayer);
+        this.platformCollision = this.physics.add.collider(this.plrSpy, platformLayer);
         //For dropping through platforms, we can temporarly disable the collider between player and platform layer
         
         //moving text 
         this.dressedText = this.add.text(game.config.width/2 + 600, game.config.height/2, 'Getting dressed...',{fontSize: '9px'} ).setOrigin(0.5);
 
         //colliders
-         this.physics.add.overlap(this.plrSpy, this.groupDetectors, this.detected, null, this);
-         this.gameOver = false;
+        this.physics.add.overlap(this.plrSpy, this.groupDetectors, this.detected, null, this);
+        this.gameOver = false;
     }
 
     update(time, delta ) {
