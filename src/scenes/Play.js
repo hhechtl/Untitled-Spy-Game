@@ -20,8 +20,8 @@ class Play extends Phaser.Scene {
         // 1st arg, the tileset name, needs to match the tileset name in the Tiled file (check the program)
 
         //Creates layers matching the layers we made in Tiled software
-        let solidLayer = mapProto.createLayer('Solid', tilesCity, 0, 0);
-        let platformLayer = mapProto.createLayer('Platform', tilesCity, 0, 0);
+        let solidLayer = mapProto.createLayer('Solid', tilesCity, -16, -16);
+        let platformLayer = mapProto.createLayer('Platform', tilesCity, -16, -16);
         //Caredful that all of the keys and stuff match what was defined in the Tiled file.
         
         //Makes all tiles that have property "collides" have collision
@@ -41,7 +41,7 @@ class Play extends Phaser.Scene {
 
         //temp floor
         this.floor = new Floor(this,200,game.config.height);
-        this.physics.add.collider(this.plrSpy,this.floor);
+        this.physics.add.collider(this.plrSpy, this.floor);
         this.physics.add.collider(this.plrSpy, solidLayer);
         this.physics.add.collider(this.plrSpy, platformLayer);
     }
