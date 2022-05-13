@@ -1,0 +1,1 @@
+/* An object the player can interact with to activate (such as a button) - Santiago*/
