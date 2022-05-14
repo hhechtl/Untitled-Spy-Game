@@ -59,6 +59,10 @@ class Play extends Phaser.Scene {
         //Create objective tracker
         this.buttonTracker = new Checklist(this, "buttonTracker", this.groupButtonObjs.length);
 
+        for(let button in this.groupButtonObjs.children.getArray()){
+            console.log("Here's a button");
+        }
+
         // group of detectors
         // if player i caught in one game ends
         this.groupDetectors = this.physics.add.group();
