@@ -10,10 +10,21 @@ class Play extends Phaser.Scene {
         this.load.path = 'assets/';
         this.load.image('tilesCityPH', 'PH_city_tiles_small.png');
         this.load.tilemapTiledJSON('lvlDigitalProto', 'levels/level_digital_prototype.json');
-        console.log("Finished loading");
+        
+        this.load.image('objButton', 'PH_obj_button.png');
     }
 
     create() {
+        //defining keys
+        keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+        keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+        keyDisguise = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+        keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        keyInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+
+
         //Adding tilemap
         const mapProto = this.make.tilemap({key: 'lvlDigitalProto'});
         const tilesCity = mapProto.addTilesetImage('PH_city_tiles', 'tilesCityPH');
@@ -27,27 +38,17 @@ class Play extends Phaser.Scene {
         //Makes all tiles that have property "collides" have collision
         solidLayer.setCollisionByProperty( {collides: true} );
         platformLayer.setCollisionByProperty( {collides: true} );
+        //Makes all the platform tiles only have 1-way collision
         platformLayer.forEachTile(tile => {
             if(tile.index == 16){
-                console.log("Made a tile one-way");
                 tile.collideLeft = false;
                 tile.collideRight = false;
                 tile.collideDown = false;
             }
         })
 
-        
-
 
         this.add.text(game.config.width/2, game.config.height/2, 'PLAY' ).setOrigin(0.5);
-        keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
-        
-        //defining keys 
-        keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-        keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
-        keyDisguise = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
-        keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         //create player 
         this.plrSpy = new PlayerSpy(this, 100, 50);
 
@@ -56,18 +57,37 @@ class Play extends Phaser.Scene {
         this.ray;
         this.createDetectors();
         this.createSpotlights(solidLayer, platformLayer);
+        //Create buttons
+        this.groupButtonObjs = this.add.group([new ObjInteract(this, 272, 32, 'objButton'),
+         new ObjInteract(this, 16, 208, 'objButton'), new ObjInteract(this, 528, 208, 'objButton'),
+         new ObjInteract(this, 272, 432, 'objButton')]);
+        this.groupButtonObjs.runChildUpdate = true;
+        //Create objective tracker
+        this.buttonTracker = new Checklist(this, "buttonTracker", this.groupButtonObjs.countActive());
+
+        //Add event for each button when they are pressed, listening for the signal 'objactivated'
+        let buttons = this.groupButtonObjs.getChildren(); //More like a dict than an array...
+        for(let i = 0; i < buttons.length; i++){
+            let button = buttons[i];
+            button.on('objactivated', () => {
+                this.buttonTracker.addObjective();
+            });
+        }
+        /*With ability to establish events and listeners, we could theoretically add a locked door 
+        (which I'll add later) - Santiago*/
 
 
-        this.physics.add.collider(this.plrSpy, solidLayer);
-        this.platformCollision = this.physics.add.collider(this.plrSpy, platformLayer);
-        //For dropping through platforms, we can temporarly disable the collider between player and platform layer
-        
         //moving text 
         this.dressedText = this.add.text(game.config.width/2 + 600, game.config.height/2, 'Getting dressed...',{fontSize: '9px'} ).setOrigin(0.5);
 
         this.gameOver = false;
 
 
+
+        //colliders
+        this.physics.add.collider(this.plrSpy, solidLayer);
+        this.platformCollision = this.physics.add.collider(this.plrSpy, platformLayer);
+    
     }
 
     update(time, delta ) {
