@@ -13,6 +13,8 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         this.disguiseActive = false;
         this.gettingDressed = false; 
         this.detected = false;
+
+        this.tempUI = false; // remove later 
         
 
         //needs to be tweaked 
@@ -25,6 +27,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
 
         // remove later, for testing
         this.setCollideWorldBounds(true);
+
         
     }
 
@@ -36,11 +39,11 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         delta /= 1000
         //Horizontal movement
         if(keyLeft.isDown && this.x > 0 ){  //player will move slower when disguise is active
-            this.disguiseActive ? this.setAccelerationX(-this.slowedMoveSpeed) : this.setAccelerationX(-this.normalMoveSpeed);
+            this.gettingDressed ? this.setAccelerationX(-this.slowedMoveSpeed) : this.setAccelerationX(-this.normalMoveSpeed);
     
         }
         else if(keyRight.isDown && this.x < config.width){
-            this.disguiseActive ? this.setAccelerationX(this.slowedMoveSpeed) : this.setAccelerationX(this.normalMoveSpeed);
+            this.gettingDressed ? this.setAccelerationX(this.slowedMoveSpeed) : this.setAccelerationX(this.normalMoveSpeed);
         }
         else{
             //player stops moving when not holding key
@@ -50,7 +53,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         //jumping 
         // how to implement it was looked from here.
         //http://floss.booktype.pro/learn-javascript-with-phaser/game-mechanic-longer-jumps-if-holding-jump-down/
-        if(!this.disguiseActive){ // player can only jump when not disguised
+        if(!this.gettingDressed){ // player can only jump when not gettig dressed
             if(keyJump.isDown && !keyDown.isDown){
                 if(this.body.onFloor() && this.jumpTime == 0){
                     
@@ -76,7 +79,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
             this.active = this.scene.time.addEvent({ delay: 10000, callback: () =>{
                 console.log("its off");
                 this.disguiseOff()
-                this.gettingDressed = false; //remove later
+                this.tempUI = false;
                 this.scene.dressedText.x = this.y - 300; // remove later
                 this.scene.dressedText.text = "Getting Dressed..."; //remove later 
             } });
@@ -84,7 +87,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
             this.gettingDressed = true; // text follows player 
         }else if (!this.disguiseActive){
             this.gettingDressed = false;
-            this.scene.dressedText.x = this.y - 300; 
+            this.scene.dressedText.x = this.y - 1000; 
         }
 
         //Dropping through platforms (while DOWN + JUMP is held down)
@@ -99,8 +102,9 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
     disguiseOn(){
             console.log("Disguise On");
             this.disguiseActive = true;
-            //this.gettingDressed = false;               //turn these on when we have visuals
+            this.gettingDressed = false;               //turn these on when we have visuals
             //this.scene.dressedText.x = this.y - 300;
+            this.tempUI = true; //remove later 
             this.scene.dressedText.text = "Disguised"; // remove later
 
     }

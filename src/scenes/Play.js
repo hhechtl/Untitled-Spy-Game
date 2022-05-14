@@ -77,7 +77,7 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2, 'GAMEOVER' ).setOrigin(0.5);
         }
         //allows text to follow player while getting dressed 
-        if(this.plrSpy.gettingDressed){
+        if(this.plrSpy.gettingDressed || this.plrSpy.tempUI){
             this.dressedText.x = this.plrSpy.x +10;
             this.dressedText.y = this.plrSpy.y - 30;
         }
