@@ -53,6 +53,7 @@ class Play extends Phaser.Scene {
         this.plrSpy = new PlayerSpy(this, 100, 50);
 
         //creating detectors for level
+        this.degree = 0;
         this.raycaster;
         this.ray;
         this.createDetectors();
@@ -88,6 +89,10 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.plrSpy, solidLayer);
         this.platformCollision = this.physics.add.collider(this.plrSpy, platformLayer);
     
+        this.rotate = this.time.addEvent({ delay: 1000, callback: () =>{
+            this.ray.setAngleDeg(this.degree++);
+            this.intersections =this.ray.castCone();
+         }, loop: true });
     }
 
     update(time, delta ) {
@@ -102,8 +107,6 @@ class Play extends Phaser.Scene {
             this.dressedText.x = this.plrSpy.x +10;
             this.dressedText.y = this.plrSpy.y - 30;
         }
-        let visibleObjects = this.ray.overlap();
-        console.log(visibleObjects);
     }
 
     createDetectors(){
@@ -115,6 +118,8 @@ class Play extends Phaser.Scene {
     createSpotlights(){
         //https://github.com/wiserim/phaser-raycaster
         this.ray = this.raycaster.createRay();
+        this.ray.setAngleDeg(this.degree);
+        this.ray.setConeDeg(45);
         //set ray position
         this.ray.setOrigin(275, 220);
         //enable auto slicing field of view
@@ -127,7 +132,7 @@ class Play extends Phaser.Scene {
         this.ray.setCollisionRange(200);
 
         //cast ray
-        this.intersections =this.ray.castCircle();
+        this.intersections =this.ray.castCone();
         
         //if player is caught in light 
         this.physics.add.overlap(this.ray, this.plrSpy, function(rayFoVCircle, target){
