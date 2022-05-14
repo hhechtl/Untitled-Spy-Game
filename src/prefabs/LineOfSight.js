@@ -7,6 +7,7 @@ class LOS extends Phaser.Physics.Arcade.Sprite {
 
         
     }
+    
     update(){
  
     }
