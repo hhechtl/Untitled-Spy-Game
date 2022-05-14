@@ -36,6 +36,9 @@ class Play extends Phaser.Scene {
             }
         })
 
+        
+
+
         this.add.text(game.config.width/2, game.config.height/2, 'PLAY' ).setOrigin(0.5);
         keyJump = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         
@@ -51,10 +54,8 @@ class Play extends Phaser.Scene {
         //creating detectors for level
         this.raycaster;
         this.ray;
-        this.ray2;
-        this.degree = 0;
         this.createDetectors();
-        this.createSpotlights();
+        this.createSpotlights(solidLayer, platformLayer);
 
 
         this.physics.add.collider(this.plrSpy, solidLayer);
@@ -66,20 +67,12 @@ class Play extends Phaser.Scene {
 
         this.gameOver = false;
 
-        this.rotate = this.time.addEvent({ delay: 1000, callback: () =>{
-            console.log("rotatingggg");
-            this.degree++;
-            this.ray.setAngleDeg(this.degree);
-            this.ray2.setAngleDeg(this.degree+180);
-            this.ray2.castCone();
-            this.ray.castCone();
-        }, loop: true});
+
     }
 
     update(time, delta ) {
         if(!this.gameOver){
-            this.plrSpy.update(time, delta);
-            //rotate the lights 
+            this.plrSpy.update(time, delta); 
         }
         if(this.gameOver){
             this.add.text(game.config.width/2, game.config.height/2, 'GAMEOVER' ).setOrigin(0.5);
@@ -89,7 +82,8 @@ class Play extends Phaser.Scene {
             this.dressedText.x = this.plrSpy.x +10;
             this.dressedText.y = this.plrSpy.y - 30;
         }
-
+        let visibleObjects = this.ray.overlap();
+        console.log(visibleObjects);
     }
 
     createDetectors(){
@@ -99,30 +93,30 @@ class Play extends Phaser.Scene {
           });
     }
     createSpotlights(){
+        //https://github.com/wiserim/phaser-raycaster
         this.ray = this.raycaster.createRay();
         //set ray position
         this.ray.setOrigin(275, 220);
-        //set ray direction 
-        this.ray.setAngleDeg(this.degree);
-        //set ray's cone angle (in degrees)
-        this.ray.setConeDeg(45);
-        //cast rays in a cone
-        this.ray.castCone();
+        //enable auto slicing field of view
+        this.ray.autoSlice = true;
+        //enable arcade physics body
+        this.ray.enablePhysics();
 
-        this.ray2 = this.raycaster.createRay();
-        //set ray position
-        this.ray2.setOrigin(275, 220);
-        //set ray direction 
-        this.ray2.setAngleDeg(this.degree+180);
-        //set ray's cone angle (in degrees)
-        this.ray2.setConeDeg(45);
-        //cast rays in a cone
-        this.ray2.castCone();
+        
+        //set collision (field of view) range
+        this.ray.setCollisionRange(200);
+
+        //cast ray
+        this.intersections =this.ray.castCircle();
+        
+        //if player is caught in light 
+        this.physics.add.overlap(this.ray, this.plrSpy, function(rayFoVCircle, target){
+            console.log("detected");
+            //target.detectedFunc();
+        }, this.ray.processOverlap.bind(this.ray));
+    
+    
     }
 
-    detected(plrObj, detectedObj){
-        plrObj.detected = true;
-        this.gameOver = true;
-    }
 
 }

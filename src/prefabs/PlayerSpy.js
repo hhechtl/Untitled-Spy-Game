@@ -111,4 +111,8 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
     disguiseOff(){
         this.disguiseActive = false;
     }
+    detectedFunc(){
+            this.detected = true;
+            this.scene.gameOver = true;
+    }
 }
