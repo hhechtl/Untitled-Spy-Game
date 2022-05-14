@@ -13,7 +13,16 @@ let config = {
                 debug: true
           }
       },
-      scene: [ Menu, Play, Option, Credit, LevelSelect]
+      scene: [ Menu, Play, Option, Credit, LevelSelect],
+      plugins:{
+        scene: [
+          {
+            key: 'PhaserRaycaster',
+                plugin: PhaserRaycaster,
+                mapping: 'raycasterPlugin'
+          }
+        ]
+      }
   }
   
   let game = new Phaser.Game(config);

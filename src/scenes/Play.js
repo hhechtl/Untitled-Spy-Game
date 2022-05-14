@@ -47,15 +47,15 @@ class Play extends Phaser.Scene {
         keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         //create player 
         this.plrSpy = new PlayerSpy(this, 100, 50);
-        
-        // group of detectors
-        // if player i caught in one game ends
-        this.groupDetectors = this.physics.add.group();
-        this.groupDetectors.defaults = {}; //Prevents group from chainging properies (such as gravity) of added objects
-        this.groupDetectors.runChildUpdate = true;
-        
-        // temp detector
-        //this.groupDetectors.add(new LOS(this, 200,100));
+
+        //creating detectors for level
+        this.raycaster;
+        this.ray;
+        this.ray2;
+        this.degree = 0;
+        this.createDetectors();
+        this.createSpotlights();
+
 
         this.physics.add.collider(this.plrSpy, solidLayer);
         this.platformCollision = this.physics.add.collider(this.plrSpy, platformLayer);
@@ -64,14 +64,22 @@ class Play extends Phaser.Scene {
         //moving text 
         this.dressedText = this.add.text(game.config.width/2 + 600, game.config.height/2, 'Getting dressed...',{fontSize: '9px'} ).setOrigin(0.5);
 
-        //colliders
-        this.physics.add.overlap(this.plrSpy, this.groupDetectors, this.detected, null, this);
         this.gameOver = false;
+
+        this.rotate = this.time.addEvent({ delay: 1000, callback: () =>{
+            console.log("rotatingggg");
+            this.degree++;
+            this.ray.setAngleDeg(this.degree);
+            this.ray2.setAngleDeg(this.degree+180);
+            this.ray2.castCone();
+            this.ray.castCone();
+        }, loop: true});
     }
 
     update(time, delta ) {
         if(!this.gameOver){
             this.plrSpy.update(time, delta);
+            //rotate the lights 
         }
         if(this.gameOver){
             this.add.text(game.config.width/2, game.config.height/2, 'GAMEOVER' ).setOrigin(0.5);
@@ -81,6 +89,35 @@ class Play extends Phaser.Scene {
             this.dressedText.x = this.plrSpy.x +10;
             this.dressedText.y = this.plrSpy.y - 30;
         }
+
+    }
+
+    createDetectors(){
+        this.raycaster = this.raycasterPlugin.createRaycaster();
+        this.raycaster = this.raycasterPlugin.createRaycaster({
+            debug: true
+          });
+    }
+    createSpotlights(){
+        this.ray = this.raycaster.createRay();
+        //set ray position
+        this.ray.setOrigin(275, 220);
+        //set ray direction 
+        this.ray.setAngleDeg(this.degree);
+        //set ray's cone angle (in degrees)
+        this.ray.setConeDeg(45);
+        //cast rays in a cone
+        this.ray.castCone();
+
+        this.ray2 = this.raycaster.createRay();
+        //set ray position
+        this.ray2.setOrigin(275, 220);
+        //set ray direction 
+        this.ray2.setAngleDeg(this.degree+180);
+        //set ray's cone angle (in degrees)
+        this.ray2.setConeDeg(45);
+        //cast rays in a cone
+        this.ray2.castCone();
     }
 
     detected(plrObj, detectedObj){
