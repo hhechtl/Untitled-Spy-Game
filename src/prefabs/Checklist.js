@@ -11,13 +11,15 @@ class Checklist extends Phaser.GameObjects.GameObject {
     }
 
     addObjective(amount = 1){
-        self.objectives += amount
-        if(this.objectives > this.objectivesNeeded){
+        console.log("Objective complete");
+        this.objectives += amount
+        if(this.objectives >= this.objectivesNeeded){
             this.allComplete();
         }
     }
 
     allComplete(){
         console.log("All objectives complete for a checklist");
+        this.emit('allcomplete'); //Really gotta use 'this' for everything huh? - Santiago
     }
 }

@@ -1,5 +1,4 @@
 /* An object the player can interact with to activate (such as a button) - Santiago*/
-
 class ObjInteract extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
@@ -24,6 +23,6 @@ class ObjInteract extends Phaser.Physics.Arcade.Sprite {
 
     activate(){
         this.activated = true;
-        console.log("Object was activated")
+        this.emit('objactivated');
     }
 }

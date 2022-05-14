@@ -57,11 +57,18 @@ class Play extends Phaser.Scene {
          new ObjInteract(this, 272, 432, 'objButton')]);
         this.groupButtonObjs.runChildUpdate = true;
         //Create objective tracker
-        this.buttonTracker = new Checklist(this, "buttonTracker", this.groupButtonObjs.length);
+        this.buttonTracker = new Checklist(this, "buttonTracker", this.groupButtonObjs.countActive());
 
-        for(let button in this.groupButtonObjs.children.getArray()){
-            console.log("Here's a button");
+        //Add event for each button when they are pressed, listening for the signal 'objactivated'
+        let buttons = this.groupButtonObjs.getChildren(); //More like a dict than an array...
+        for(let i = 0; i < buttons.length; i++){
+            let button = buttons[i];
+            button.on('objactivated', () => {
+                this.buttonTracker.addObjective();
+            });
         }
+        /*With ability to establish events and listeners, we could theoretically add a locked door 
+        (which I'll add later) - Santiago*/
 
         // group of detectors
         // if player i caught in one game ends
