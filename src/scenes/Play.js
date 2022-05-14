@@ -76,8 +76,10 @@ class Play extends Phaser.Scene {
         this.groupDetectors = this.physics.add.group();
         this.groupDetectors.defaults = {}; //Prevents group from chainging properies (such as gravity) of added objects
         this.groupDetectors.runChildUpdate = true;
-        // temp detector
-        this.groupDetectors.add(new LOS(this, 200,100));
+        // main detectors
+        this.detector1 = new LOS(this, 200, 100, 'objButton', 0);
+        this.detector1.body.setAngularVelocity(-45);
+        this.groupDetectors.add(this.detector1);
         this.gameOver = false;
 
 
