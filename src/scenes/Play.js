@@ -72,6 +72,11 @@ class Play extends Phaser.Scene {
             this.intersections = this.ray.castCone();
             this.path.getPoint(this.follower.t, this.follower.vec);
             this.ray.setOrigin(this.follower.vec.x, this.follower.vec.y);
+            //second light 
+            this.ray2.setAngleDeg(this.degree+180);
+            this.intersections2 = this.ray2.castCone();
+            this.path.getPoint(this.follower.t+0.5, this.follower.vec);
+            this.ray2.setOrigin(this.follower.vec.x, this.follower.vec.y);
             this.drawLOS();
          }, loop: true });
     }
@@ -96,7 +101,7 @@ class Play extends Phaser.Scene {
     createSpotlights(mappedObjects){
         //https://github.com/wiserim/phaser-raycaster
         this.ray = this.raycaster.createRay();
-        //path 
+        this.ray2 = this.raycaster.createRay();
 
         // path to rotate along 
         this.path = new Phaser.Curves.Path();
@@ -108,22 +113,29 @@ class Play extends Phaser.Scene {
             duration: 35000,
             loop: -1
         });
-        this.ray.setOrigin(275,220);
+        this.ray.setOrigin(this.follower.vec.x, this.follower.vec.y);
+        this.ray2.setOrigin(this.follower.vec.x, this.follower.vec.y);
         
         this.ray.setAngleDeg(this.degree);
         this.ray.setConeDeg(180);
-        
+        this.ray2.setAngleDeg(this.degree+180);
+        this.ray2.setConeDeg(180);
+
         //enable auto slicing field of view
         this.ray.autoSlice = true; 
         this.ray.enablePhysics();
+        this.ray2.autoSlice = true; 
+        this.ray2.enablePhysics();
         //Maps objects to the ray so it can collide with them
         this.raycaster.mapGameObjects(mappedObjects, false, {collisionTiles: [6, 11]}); 
         
         //set collision (field of view) range
         this.ray.setCollisionRange(200);
+        this.ray2.setCollisionRange(200);
 
         //cast ray
         this.intersections = this.ray.castCone();
+        this.intersections2 = this.ray2.castCone();
         
 
         //Draw ray LoS
@@ -134,8 +146,12 @@ class Play extends Phaser.Scene {
         //if player is caught in light 
         this.physics.add.overlap(this.ray, this.plrSpy, function(rayFoVCircle, target){
             console.log("detected");
-            target.detectedFunc();
+            //target.detectedFunc();
         }, this.ray.processOverlap.bind(this.ray));
+        this.physics.add.overlap(this.ray2, this.plrSpy, function(rayFoVCircle, target){
+            console.log("detected by 2");
+            //target.detectedFunc();
+        }, this.ray2.processOverlap.bind(this.ray2));
 
     }
 
@@ -145,6 +161,7 @@ class Play extends Phaser.Scene {
         this.graphics.clear();
         this.graphics.fillStyle(0xffffff, 0.3);
         this.graphics.fillPoints(this.intersections);
+        this.graphics.fillPoints(this.intersections2);
         //
         this.path.draw(this.graphics);    
     };
