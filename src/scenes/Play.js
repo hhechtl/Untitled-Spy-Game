@@ -70,6 +70,8 @@ class Play extends Phaser.Scene {
         this.rotate = this.time.addEvent({ delay: 100, callback: () =>{
             this.ray.setAngleDeg(this.degree++);
             this.intersections = this.ray.castCone();
+            this.path.getPoint(this.follower.t, this.follower.vec);
+            this.ray.setOrigin(this.follower.vec.x, this.follower.vec.y);
             this.drawLOS();
          }, loop: true });
     }
@@ -94,9 +96,22 @@ class Play extends Phaser.Scene {
     createSpotlights(mappedObjects){
         //https://github.com/wiserim/phaser-raycaster
         this.ray = this.raycaster.createRay();
-        this.ray.setOrigin(275, 220);
+        //path 
+
+        // path to rotate along 
+        this.path = new Phaser.Curves.Path();
+        this.path.add(new Phaser.Curves.Ellipse(275, 220, 25));
+        this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+        this.tweens.add({
+            targets: this.follower,
+            t: 1,
+            duration: 35000,
+            loop: -1
+        });
+        this.ray.setOrigin(275,220);
+        
         this.ray.setAngleDeg(this.degree);
-        this.ray.setConeDeg(45);
+        this.ray.setConeDeg(180);
         
         //enable auto slicing field of view
         this.ray.autoSlice = true; 
@@ -121,6 +136,7 @@ class Play extends Phaser.Scene {
             console.log("detected");
             target.detectedFunc();
         }, this.ray.processOverlap.bind(this.ray));
+
     }
 
     drawLOS(){
@@ -129,6 +145,8 @@ class Play extends Phaser.Scene {
         this.graphics.clear();
         this.graphics.fillStyle(0xffffff, 0.3);
         this.graphics.fillPoints(this.intersections);
+        //
+        this.path.draw(this.graphics);    
     };
 
     defineKeys(){
