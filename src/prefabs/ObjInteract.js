@@ -16,6 +16,7 @@ class ObjInteract extends Phaser.Physics.Arcade.Sprite {
         //Can be interacted with if either not activated, or can be activated multiple times
         if(this.scene.physics.overlap(this, this.playerRef) && (!this.activated || this.repeatable)){
             if(Phaser.Input.Keyboard.JustDown(keyInteract)){
+                this.scene.sound.play('sfx_select');
                 this.activate();
             }
         }

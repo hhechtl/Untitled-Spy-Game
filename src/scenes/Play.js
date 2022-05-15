@@ -59,6 +59,7 @@ class Play extends Phaser.Scene {
         //moving text 
         this.dressedText = this.add.text(game.config.width/2 + 600, game.config.height/2, 'Getting dressed...',{fontSize: '9px'} ).setOrigin(0.5);
         this.gameOver = false;
+        this.check = 0; // makes sure end screen doesnt apply more than once;
 
 
         //colliders
@@ -77,8 +78,9 @@ class Play extends Phaser.Scene {
         if(!this.gameOver){
             this.plrSpy.update(time, delta); 
         }
-        if(this.gameOver){
+        if(this.gameOver &&this.check == 1){
             this.add.text(game.config.width/2, game.config.height/2, 'GAMEOVER' ).setOrigin(0.5);
+            this.sound.play('sfx_discovered');
         }
         //allows text to follow player while getting dressed 
         if(this.plrSpy.gettingDressed || this.plrSpy.tempUI){
@@ -117,7 +119,7 @@ class Play extends Phaser.Scene {
         //if player is caught in light 
         this.physics.add.overlap(this.ray, this.plrSpy, function(rayFoVCircle, target){
             console.log("detected");
-            //target.detectedFunc();
+            target.detectedFunc();
         }, this.ray.processOverlap.bind(this.ray));
     }
 

@@ -14,6 +14,7 @@ class Checklist extends Phaser.GameObjects.GameObject {
         console.log("Objective complete");
         this.objectives += amount
         if(this.objectives >= this.objectivesNeeded){
+            this.scene.sound.play('sfx_finishedObjective');
             this.allComplete();
         }
     }

@@ -56,7 +56,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         if(!this.gettingDressed){ // player can only jump when not gettig dressed
             if(keyJump.isDown && !keyDown.isDown){
                 if(this.body.onFloor() && this.jumpTime == 0){
-                    
+                    this.scene.sound.play('sfx_jump');
                     // starts the jump
                     this.jumpTime = 1;
                     this.setVelocityY(this.jumpPower);
@@ -76,6 +76,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         if( (keyDisguise.getDuration() >= 5*1000) && !this.disguiseActive){
             this.disguiseOn(); 
             // timer on how long the disguise is active
+            this.scene.sound.play('sfx_disguise');
             this.active = this.scene.time.addEvent({ delay: 10000, callback: () =>{
                 console.log("its off");
                 this.disguiseOff()
@@ -114,5 +115,6 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
     detectedFunc(){
             this.detected = true;
             this.scene.gameOver = true;
+            this.scene.check++;
     }
 }

@@ -4,6 +4,12 @@ class Menu extends Phaser.Scene {
       }
 
       preload(){
+        //load audio
+        this.load.audio('sfx_select', './assets/sfx/Blip_Select.wav');
+        this.load.audio('sfx_disguise', 'assets/sfx/Disguise_applied.wav');
+        this.load.audio('sfx_finishedObjective', 'assets/sfx/Finished_objective.wav');
+        this.load.audio('sfx_jump', 'assets/sfx/Jump2.wav');
+        this.load.audio('sfx_discovered', 'assets/sfx/Player_discovered.wav');
           
       }
 
@@ -68,6 +74,7 @@ class Menu extends Phaser.Scene {
               }
               //selects the scene 
               if (Phaser.Input.Keyboard.JustDown(keyJump)) { 
+                    this.sound.play('sfx_select');
                     this.scene.start(sceneSelect);    
                 }
 
