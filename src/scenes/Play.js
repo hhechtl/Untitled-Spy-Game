@@ -46,7 +46,7 @@ class Play extends Phaser.Scene {
         this.plrSpy = new PlayerSpy(this, 100, 50);
         this.createButtons();
 
-        let rect = this.add.rectangle(50, 50, 300, 300).setStrokeStyle(1, 0xff0000);
+        let rect = this.add.rectangle( 150, 250, 50, 50).setStrokeStyle(1, 0xff0000);
 
         //creating detectors for level
         this.degree = 0;
@@ -66,7 +66,7 @@ class Play extends Phaser.Scene {
         this.platformCollision = this.physics.add.collider(this.plrSpy, platformLayer);
     
         //Rotates the cone and re-fills the intersections list
-        this.rotate = this.time.addEvent({ delay: 1000, callback: () =>{
+        this.rotate = this.time.addEvent({ delay: 100, callback: () =>{
             this.ray.setAngleDeg(this.degree++);
             this.intersections = this.ray.castCone();
             this.drawLOS();
@@ -100,7 +100,7 @@ class Play extends Phaser.Scene {
         this.ray.autoSlice = true; 
         this.ray.enablePhysics();
         //Maps objects to the ray so it can collide with them
-        this.raycaster.mapGameObjects(mappedObjects); 
+        this.raycaster.mapGameObjects(mappedObjects, false, {collisionTiles: [6, 11]}); 
         
         //set collision (field of view) range
         this.ray.setCollisionRange(200);
