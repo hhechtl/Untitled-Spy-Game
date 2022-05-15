@@ -162,6 +162,12 @@ class Play extends Phaser.Scene {
         this.ray.enablePhysics();
         this.ray2.autoSlice = true; 
         this.ray2.enablePhysics();
+
+        /*Could potentially limit the LOS range visually by surrounding it with a circle it colldies with,
+        matching the radius of the ray's collision range.*/
+        //this.rayContainer = this.add.circle(this.ray.origin.x, this.ray.origin.y, 200);
+        //mappedObjects.push(this.rayContainer);
+
         //Maps objects to the ray so it can collide with them
         this.raycaster.mapGameObjects(mappedObjects, false, {collisionTiles: [6, 11]}); 
         
