@@ -117,4 +117,9 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
             this.scene.gameOver = true;
             this.scene.check++;
     }
+    gameOverFunc(){
+        this.scene.add.text(game.config.width/2, game.config.height/2-15, 'GAMEOVER' ).setOrigin(0.5);
+        this.scene.restartbutton = this.scene.add.text(game.config.width/2, game.config.height/2 +32 , 'Restart', {color: '#FF994F'}).setOrigin(0.5);
+        this.scene.MainMenubutton = this.scene.add.text(game.config.width/2, game.config.height/2 +64 , 'Main Menu' ,{color: '#FFFFFF'}).setOrigin(0.5);
+    }
 }

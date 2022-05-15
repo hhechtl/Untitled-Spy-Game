@@ -42,15 +42,14 @@ class Play extends Phaser.Scene {
 
 
         //Create player + objects
-        this.add.text(game.config.width/2, game.config.height/2, 'PLAY' ).setOrigin(0.5);
-        this.plrSpy = new PlayerSpy(this, 100, 50);
+        this.plrSpy = new PlayerSpy(this, game.config.width/2-250, game.config.height/2+110);
         this.createButtons();
 
         let rect = this.add.rectangle( 150, 250, 50, 50).setStrokeStyle(1, 0xff0000);
 
         //creating detectors for level
         this.degree = 0;
-        this.raycaster = this.raycasterPlugin.createRaycaster({debug: true});
+        this.raycaster = this.raycasterPlugin.createRaycaster({debug:true}); //when debugging is true, we get an error when we restart a level
         this.graphics;
         this.intersections;
         this.createSpotlights([solidLayer, rect]);
@@ -92,13 +91,44 @@ class Play extends Phaser.Scene {
             this.plrSpy.update(time, delta); 
         }
         if(this.gameOver &&this.check == 1){
-            this.add.text(game.config.width/2, game.config.height/2, 'GAMEOVER' ).setOrigin(0.5);
+            this.plrSpy.gameOverFunc();
             this.sound.play('sfx_discovered');
         }
         //allows text to follow player while getting dressed 
         if(this.plrSpy.gettingDressed || this.plrSpy.tempUI){
             this.dressedText.x = this.plrSpy.x +10;
             this.dressedText.y = this.plrSpy.y - 30;
+        }
+        //game over selection 
+        if(this.gameOver){
+            if (Phaser.Input.Keyboard.JustDown(keyDown)) {
+                if(sceneSelect == 'playScene'){
+                    this.restartbutton.setColor('#FFFFFF');
+                    this.MainMenubutton.setColor('#FF994F');
+                    sceneSelect = 'menuScene';
+                }
+                else if(sceneSelect == 'menuScene'){
+                    this.MainMenubutton.setColor('#FFFFFF');
+                    this.restartbutton.setColor('#FF994F');
+                    sceneSelect = 'playScene';
+                }  
+              }
+            if (Phaser.Input.Keyboard.JustDown(keyInteract)) {
+                if(sceneSelect == 'playScene'){
+                    this.restartbutton.setColor('#FFFFFF');
+                    this.MainMenubutton.setColor('#FF994F');
+                    sceneSelect = 'menuScene';
+                }
+                else if(sceneSelect == 'menuScene'){
+                    this.MainMenubutton.setColor('#FFFFFF');
+                    this.restartbutton.setColor('#FF994F');
+                    sceneSelect = 'playScene';
+                }  
+            }  
+            if (Phaser.Input.Keyboard.JustDown(keyJump)) {
+                //console.log('selecting');
+                this.scene.start(sceneSelect);    
+            }  
         }
     }
 
@@ -111,7 +141,7 @@ class Play extends Phaser.Scene {
 
         // path to rotate along 
         this.path = new Phaser.Curves.Path();
-        this.path.add(new Phaser.Curves.Ellipse(275, 220, 25));
+        this.path.add(new Phaser.Curves.Ellipse(game.config.width/2, game.config.height/2-15, 25));
         this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
         this.tweens.add({
             targets: this.follower,
@@ -153,7 +183,7 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.ray, this.plrSpy, function(rayFoVCircle, target){
             if(!target.disguiseActive){
                 console.log("detected");
-                //target.detectedFunc();
+               // target.detectedFunc();
             }
         }, this.ray.processOverlap.bind(this.ray));
         this.physics.add.overlap(this.ray2, this.plrSpy, function(rayFoVCircle, target){
@@ -206,4 +236,5 @@ class Play extends Phaser.Scene {
         /*With ability to establish events and listeners, we could theoretically add a locked door 
         (which I'll add later) - Santiago*/
     }
+
 }
