@@ -45,14 +45,14 @@ class Play extends Phaser.Scene {
         this.plrSpy = new PlayerSpy(this, game.config.width/2-250, game.config.height/2+110);
         this.createButtons();
 
-        let rect = this.add.rectangle( 150, 250, 50, 50).setStrokeStyle(1, 0xff0000);
+        //let rect = this.add.rectangle( 150, 250, 50, 50).setStrokeStyle(1, 0xff0000); Used for debugging
 
         //creating detectors for level
         this.degree = 0;
-        this.raycaster = this.raycasterPlugin.createRaycaster({debug:true}); //when debugging is true, we get an error when we restart a level
+        this.raycaster = this.raycasterPlugin.createRaycaster({debug:false}); //when debugging is true, we get an error when we restart a level
         this.graphics;
         this.intersections;
-        this.createSpotlights([solidLayer, rect]);
+        this.createSpotlights([solidLayer]);
         
 
         //moving text 
@@ -202,7 +202,6 @@ class Play extends Phaser.Scene {
         this.graphics.fillStyle(0xffffff, 0.3);
         this.graphics.fillPoints(this.intersections);
         this.graphics.fillPoints(this.intersections2);
-        //
         this.path.draw(this.graphics);    
     };
 
