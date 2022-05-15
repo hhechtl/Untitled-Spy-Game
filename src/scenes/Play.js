@@ -75,9 +75,15 @@ class Play extends Phaser.Scene {
             //second light 
             this.ray2.setAngleDeg(this.degree+180);
             this.intersections2 = this.ray2.castCone();
-            this.path.getPoint(this.follower.t+0.5, this.follower.vec);
+            // fixes bug where send ray jumps onto the 
+            //same path as the first array
+            if(this.path.getPoint(this.follower.t+0.5, this.follower.vec) == null){
+                this.path.getPoint(this.follower.t - 0.5, this.follower.vec);
+            }
             this.ray2.setOrigin(this.follower.vec.x, this.follower.vec.y);
             this.drawLOS();
+            
+    
          }, loop: true });
     }
 
@@ -110,7 +116,7 @@ class Play extends Phaser.Scene {
         this.tweens.add({
             targets: this.follower,
             t: 1,
-            duration: 35000,
+            duration: 35025,
             loop: -1
         });
         this.ray.setOrigin(this.follower.vec.x, this.follower.vec.y);
@@ -145,12 +151,16 @@ class Play extends Phaser.Scene {
 
         //if player is caught in light 
         this.physics.add.overlap(this.ray, this.plrSpy, function(rayFoVCircle, target){
-            console.log("detected");
-            //target.detectedFunc();
+            if(!target.disguiseActive){
+                console.log("detected");
+                //target.detectedFunc();
+            }
         }, this.ray.processOverlap.bind(this.ray));
         this.physics.add.overlap(this.ray2, this.plrSpy, function(rayFoVCircle, target){
-            console.log("detected by 2");
-            //target.detectedFunc();
+            if(!target.disguiseActive){
+                console.log("detected by 2");
+                //target.detectedFunc();
+            }
         }, this.ray2.processOverlap.bind(this.ray2));
 
     }
