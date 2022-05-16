@@ -49,7 +49,9 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
             //player stops moving when not holding key
             this.setAccelerationX(0);
         }
-        
+        //while getting dressed max speed is slower
+        this.gettingDressed ? this.setMaxVelocity(150,1000) : this.setMaxVelocity(250,1000);
+
         //jumping 
         // how to implement it was looked from here.
         //http://floss.booktype.pro/learn-javascript-with-phaser/game-mechanic-longer-jumps-if-holding-jump-down/
