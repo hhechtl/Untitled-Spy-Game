@@ -21,7 +21,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         this.normalMoveSpeed = 500; //Horizontal acceleration
         this.slowedMoveSpeed = 150; //Slow (disguising) acceleration
         this.setMaxVelocity(250,1000); // max velocity 
-        this.setDragX(600);
+        this.setDragX(1000);
         this.jumpPower = -300;
         this.jumpTime = 1;
 
@@ -40,13 +40,18 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
         //Horizontal movement
         if(keyLeft.isDown && this.x > 0 ){  //player will move slower when disguise is active
             this.gettingDressed ? this.setAccelerationX(-this.slowedMoveSpeed) : this.setAccelerationX(-this.normalMoveSpeed);
-    
+            if(this.body.velocity.x > 0){ //prevents 'sliding' when changing directions
+                this.setVelocityX(0);
+            }
         }
         else if(keyRight.isDown && this.x < config.width){
             this.gettingDressed ? this.setAccelerationX(this.slowedMoveSpeed) : this.setAccelerationX(this.normalMoveSpeed);
+            if(this.body.velocity.x < 0){ //prevents 'sliding' when changing directions
+                this.setVelocityX(0);
+            }
         }
         else{
-            //player stops moving when not holding key
+            //player stops moving when not holding 
             this.setAccelerationX(0);
         }
         //while getting dressed max speed is slower
@@ -118,7 +123,9 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
             this.detected = true;
             this.scene.gameOver = true;
             this.scene.check++;
+            //big fixes
             this.scene.dressedText.x = game.config.width/2 + 600; 
+            this.setAccelerationX(0);
     }
     gameOverFunc(){
         this.scene.add.text(game.config.width/2, game.config.height/2-15, 'GAMEOVER' ).setOrigin(0.5);
