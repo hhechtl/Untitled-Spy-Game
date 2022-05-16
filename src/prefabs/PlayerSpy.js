@@ -88,7 +88,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
             this.gettingDressed = true; // text follows player 
         }else if (!this.disguiseActive){
             this.gettingDressed = false;
-            this.scene.dressedText.x = this.y - 1000; 
+            this.scene.dressedText.x = game.config.width/2 + 600; 
         }
 
         //Dropping through platforms (while DOWN + JUMP is held down)
@@ -116,6 +116,7 @@ class PlayerSpy extends Phaser.Physics.Arcade.Sprite {
             this.detected = true;
             this.scene.gameOver = true;
             this.scene.check++;
+            this.scene.dressedText.x = game.config.width/2 + 600; 
     }
     gameOverFunc(){
         this.scene.add.text(game.config.width/2, game.config.height/2-15, 'GAMEOVER' ).setOrigin(0.5);
