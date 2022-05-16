@@ -12,6 +12,8 @@ class Play extends Phaser.Scene {
         this.load.tilemapTiledJSON('lvlDigitalProto', 'levels/level_digital_prototype.json');
         
         this.load.image('objButton', 'PH_obj_button.png');
+        this.load.image('playerDisguise', 'TempDisguise.png')
+        this.load.image('playerMain', 'TempPlayer.png')
     }
 
     
